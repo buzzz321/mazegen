@@ -1,0 +1,105 @@
+<html>
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+	<title>My first Three.js app</title>
+	<style>canvas { width: 100%; height: 100% }</style>
+  </head>
+  <body>
+	<script src="js/three.min.js"></script>
+	<script src="js/mazegen.js"></script>
+    <script src="js/THREEx.KeyboardState.js"></script>
+
+	
+	<script type="text/javascript">
+	  
+	  var camera, scene, renderer;
+	  var map3d, mazegen, ball;
+      var lookAtX;
+      var lookAtY;
+      var lookAtZ;
+      var dz;
+      var rotX;
+      var keyboard;
+
+      
+	  init();
+	  animate();
+	  
+	  function init() {
+		  var index = 0;
+          dy = 50;
+          rotX = 0;
+          
+          keyboard = new THREEx.KeyboardState();
+          
+          scene = new THREE.Scene();
+          scene.add(camera);
+          
+		  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+		  camera.position.x = 250;
+		  camera.position.y = window.innerWidth / 2;
+		  camera.position.z = 5;
+
+          lookAtX = 250;
+          lookAtY = window.innerWidth / 2;
+          lookAtZ = 150;
+          
+          camera.lookAt(new THREE.Vector3( lookAtX, lookAtY, lookAtZ ));//296
+		  ball = new THREE.SphereGeometry(5);
+          var material = new THREE.MeshLambertMaterial( {color: 0xFF0000 } );
+          ball = new THREE.Mesh( ball, material );
+		  ball.position.x = lookAtX;
+		  ball.position.y = lookAtY + 2;
+		  ball.position.z = lookAtZ;
+          
+          scene.add( ball );
+		  
+          mazegen = new MazeGen();
+
+          mazegen.init();
+          map3d = mazegen.gen3dmap( window.innerWidth , window.innerHeight );
+          
+		  for ( index = 0; index < map3d.length; index += 1 ) {
+              scene.add( map3d[index] );
+		  }
+          
+          var light = new THREE.AmbientLight( 0xaaaaaa ); //PointLight( 0xFFFFFF );
+          //var lightPos = new THREE.Vector3( 5600, 900, 500 );
+		  //light.position.set( lightPos.x, lightPos.y, lightPos.z );
+		  scene.add( light );
+		  
+		  renderer = new THREE.CanvasRenderer();
+		  renderer.setSize( window.innerWidth, window.innerHeight );
+		  
+		  document.body.appendChild( renderer.domElement );
+		  
+	  }
+	  
+	  function animate() {
+		  
+		  // note: three.js includes requestAnimationFrame shim
+		  requestAnimationFrame( animate );
+
+          if( keyboard.pressed("p") ) dz += 1.0;
+          if( keyboard.pressed("ö") ) dz -= 1.0;
+
+          if (dz > 550) {
+              dz = 50;
+          }
+          
+          //ball.position.y = -200 + dz;
+          camera.position.y = -200 + dz;
+          camera.lookAt(new THREE.Vector3( lookAtX, lookAtY + dz, lookAtZ ));
+          //camera.rotation.y += 0.01;
+		  //mesh.rotation.x += 0.01;
+		  //mesh.rotation.y += 0.02;
+		  
+		  renderer.render( scene, camera );
+		  
+	  }
+	  
+	</script>
+	
+</body> </html>
