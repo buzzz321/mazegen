@@ -2,6 +2,7 @@
 function MazeGen() {
 	this.R = 0;
 	this.C = 1;
+    this.tile_size = 50;
 }
 
 MazeGen.prototype.init = function() {
@@ -26,29 +27,18 @@ MazeGen.prototype.init = function() {
 	return this.map;
 }
 
-// Rotate an object around an arbitrary axis in object space
-MazeGen.prototype.rotateAroundObjectAxis = function(object, axis, radians) {
-    var rotObjectMatrix = new THREE.Matrix4();
-    
-    rotObjectMatrix.makeRotationAxis(axis.normalize(), radians);
-    object.matrix.multiply(rotObjectMatrix);      // post-multiply
-    object.rotation.setEulerFromRotationMatrix(object.matrix);
-
-    return object;
-}
 
 MazeGen.prototype.genwall = function( x_start, y_start, size, type ) {
 	var walls = [];
-    var yAxis = new THREE.Vector3(0,1,0);
     //----------------------------------- width, height, widthSegments, heightSegments
 	var plane = new THREE.PlaneGeometry( size/2, size, 1, 1 );
 	var color = new THREE.Color( 0x090909 );
-	var material = new THREE.MeshLambertMaterial( {color: color } );
+	var material = new THREE.MeshLambertMaterial( {color: color, ambient:  color } );
 
 
     var mesh = new THREE.Mesh( plane, material );
 
-    mesh = this.rotateAroundObjectAxis( mesh, yAxis, -Math.PI/2);
+    mesh.rotation.y = -Math.PI/2;
 
     mesh.position.x = x_start - size/4;
     mesh.position.y = y_start;
@@ -60,27 +50,25 @@ MazeGen.prototype.genwall = function( x_start, y_start, size, type ) {
 
 MazeGen.prototype.gen3dmap = function( width, height ) {
 	var map3d = [];
-	var tile_size = 50;
 	var index = 0;
-	var plane = new THREE.PlaneGeometry( tile_size, tile_size, 1, 1 );
+	var cube = new THREE.CubeGeometry( this.tile_size, this.tile_size, 5, 1, 1, 1 );
 	var color = new THREE.Color( 0xA9A9A9 );
-	var material = new THREE.MeshLambertMaterial( {color: color } );
-	var xAxis = new THREE.Vector3(1,0,0);
+	var material = new THREE.MeshLambertMaterial( {color: color, ambient:  color } );
     
 	for( index = 0; index < this.map.length; index += 1 ){
-		var mesh = new THREE.Mesh( plane, material );
+		var mesh = new THREE.Mesh( cube, material );
+        
+        mesh.rotation.x = Math.PI/2;
+		mesh.position.x = this.map[index].coord[this.C] * this.tile_size;
+		mesh.position.z = this.map[index].coord[this.R] * this.tile_size + 100;
+		mesh.position.y = 20;
 
-        mesh = this.rotateAroundObjectAxis( mesh, xAxis, Math.PI/2);
-		mesh.position.x = this.map[index].coord[this.C] * tile_size;
-		mesh.position.z = this.map[index].coord[this.R] * tile_size;
-		mesh.position.y = width / 2;
-
-        console.log( 'x=     ', mesh.position.x, ' y=     ', mesh.position.y, ' z=     ', mesh.position.z);
+        console.log( '->x=     ', mesh.position.x, ' y=     ', mesh.position.y, ' z=     ', mesh.position.z);
 		map3d.push( mesh );
         //if ( index === 0){
-        //    map3d.push( this.genwall( mesh.position.x, mesh.position.y, tile_size, 1));
+        //    map3d.push( this.genwall( mesh.position.x, mesh.position.y, this.tile_size, 1));
         //}
-				
+		
 	}
 
 	return map3d;
