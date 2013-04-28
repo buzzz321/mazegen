@@ -6,7 +6,7 @@ var lookAtZ;
 var dz;
 var rotX;
 var keyboard;
-var slask;
+var first_elem;
 
 
 init();
@@ -29,26 +29,26 @@ function init() {
 
     mazegen.init();
     map3d = mazegen.gen3dmap( window.innerWidth , window.innerHeight );
-    slask = map3d[0];
+    first_elem = map3d[0];
 	for ( index = 0; index < map3d.length; index += 1 ) {
         scene.add( map3d[index] );
         console.log('added');
 	}
 
-    console.log( 'S->x=     ', slask.position.x, ' y=     ', slask.position.y, ' z=     ', slask.position.z);
-    console.log('scale=', slask.scale);
+    console.log( 'S->x=     ', first_elem.position.x, ' y=     ', first_elem.position.y, ' z=     ', first_elem.position.z);
+    console.log('scale=', first_elem.scale);
 
     dz = 140;
     var light = new THREE.AmbientLight( 0xFFFFFF ); //PointLight( 0xFFFFFF );
 	scene.add( light );
 
 
-    camera.position.x =  slask.position.x + mazegen.tile_size / 4;
-    camera.position.y =  slask.position.y + 10 + 0;
+    camera.position.x =  first_elem.position.x + mazegen.tile_size / 4;
+    camera.position.y =  first_elem.position.y + 10 + 0;
     camera.position.z = 150;
     
-    lookAtX =  slask.position.x + mazegen.tile_size / 4;
-    lookAtY =  slask.position.x + 1;
+    lookAtX =  first_elem.position.x + mazegen.tile_size / 4;
+    lookAtY =  first_elem.position.x + 1;
     lookAtZ = 600;
 
     var axis = new THREE.AxisHelper(50);
@@ -75,6 +75,11 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	
 	document.body.appendChild( renderer.domElement );
+    $(renderer.domElement).mousemove(function(event) {
+        var msg = "M ";
+        msg += event.pageX + ", " + event.pageY;
+        $("#mouse").html(msg);
+});
 	
 }
 
@@ -96,8 +101,8 @@ function animate() {
     //camera.rotation.z += 0.01;
     //camera.rotation.y += 0.01;
 
-	//slask.rotation.x += 0.01;
-	//slask.rotation.y += 0.02;
+	//first_elem.rotation.x += 0.01;
+	//first_elem.rotation.y += 0.02;
 	$("#pos").html("C " + camera.position.x + ", " + camera.position.y + ", " + camera.position.z);
 	renderer.render( scene, camera );
 	
