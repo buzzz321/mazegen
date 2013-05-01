@@ -7,6 +7,7 @@ var dz;
 var rotX;
 var keyboard;
 var first_elem;
+var mouse_down = false;
 
 
 init();
@@ -32,7 +33,6 @@ function init() {
     first_elem = map3d[0];
 	for ( index = 0; index < map3d.length; index += 1 ) {
         scene.add( map3d[index] );
-        console.log('added');
 	}
 
     console.log( 'S->x=     ', first_elem.position.x, ' y=     ', first_elem.position.y, ' z=     ', first_elem.position.z);
@@ -75,12 +75,10 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	
 	document.body.appendChild( renderer.domElement );
-    $(renderer.domElement).mousemove(function(event) {
-        var msg = "M ";
-        msg += event.pageX + ", " + event.pageY;
-        $("#mouse").html(msg);
-});
-	
+
+    var mouse = new MouseControl( renderer.domElement );
+    
+    mouse.init();
 }
 
 function animate() {
@@ -98,13 +96,9 @@ function animate() {
     ball.position.z = -20 + dz;
     camera.position.z = -20 + dz;
     camera.lookAt(new THREE.Vector3( lookAtX, lookAtY , lookAtZ + dz));
-    //camera.rotation.z += 0.01;
-    //camera.rotation.y += 0.01;
 
-	//first_elem.rotation.x += 0.01;
-	//first_elem.rotation.y += 0.02;
 	$("#pos").html("C " + camera.position.x + ", " + camera.position.y + ", " + camera.position.z);
-	renderer.render( scene, camera );
-	
+	renderer.render( scene, camera );	
 }
+
 
