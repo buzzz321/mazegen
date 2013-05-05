@@ -2,7 +2,9 @@
 function MazeGen() {
 	this.R = 0;
 	this.C = 1;
-    this.tile_size = 50;
+    this.xstart = 50;
+    this.ystart = 50;
+    this.tile_size = 300;
 }
 
 MazeGen.prototype.init = function() {
@@ -59,8 +61,8 @@ MazeGen.prototype.gen3dmap = function( width, height ) {
 		var mesh = new THREE.Mesh( cube, material );
         
         mesh.rotation.x = Math.PI/2;
-		mesh.position.x = this.map[index].coord[this.C] * this.tile_size;
-		mesh.position.z = this.map[index].coord[this.R] * this.tile_size + 100;
+		mesh.position.x = this.map[index].coord[this.C] * this.xstart;
+		mesh.position.z = this.map[index].coord[this.R] * this.ystart + 100;
 		mesh.position.y = 20;
 
         console.log( '->x=     ', mesh.position.x, ' y=     ', mesh.position.y, ' z=     ', mesh.position.z);

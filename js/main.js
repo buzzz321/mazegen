@@ -8,7 +8,7 @@ var rotX;
 var keyboard;
 var first_elem;
 var mouse_down = false;
-
+var move_vector;
 
 init();
 animate();
@@ -97,7 +97,9 @@ function animate() {
     camera.position.z = -20 + dz;
     camera.lookAt(new THREE.Vector3( lookAtX, lookAtY , lookAtZ + dz));
 
-	$("#pos").html("C " + camera.position.x + ", " + camera.position.y + ", " + camera.position.z);
+    var msg = "C " + camera.position.x + ", " + camera.position.y + ", " + camera.position.z;
+    msg += "<br>" + "w " + window.innerWidth /2 + " h " +window.innerHeight / 2 ;
+	$("#pos").html(msg);
 	renderer.render( scene, camera );	
 }
 
