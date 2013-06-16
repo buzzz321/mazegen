@@ -7,7 +7,7 @@ function MouseControl(canvas_element) {
     this.dx = 0;
     this.dy = 0;
     this.lat = 0; //degrees
-    this.long = 0;//degrees
+    this.longitude = 0;//degrees
 }
 
 MouseControl.prototype.init = function() {
@@ -27,16 +27,16 @@ MouseControl.prototype.init = function() {
                 self.dx = 0;
             }
             if (self.old_x !== event.pageX) {
-                self.long += self.dx;
+                self.longitude += self.dx / 2;
 
-                if (self.long > 180) {
-                    self.long = 180;
+                if (self.longitude > 180) {
+                    self.longitude = 180;
                 }
-                if (self.long < -180) {
-                    self.long = -180;
+                if (self.longitude < -180) {
+                    self.longitude = -180;
                 }
             }
-            msg = "dx " + self.dx + " longitude " + self.long;
+            msg = "dx " + self.dx + " longitudeitude " + self.longitude;
 
             $("#slask").html(msg);
             self.old_x = event.pageX;
