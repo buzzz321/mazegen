@@ -3,6 +3,9 @@
 server:
 	python -m SimpleHTTPServer
 
+server3:
+	python -m http.server
+
 deploy:
 	# assume there is something to commit
 	# use "git diff --exit-code HEAD" to know if there is something to commit
