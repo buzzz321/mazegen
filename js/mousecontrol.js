@@ -16,7 +16,7 @@ MouseControl.prototype.init = function() {
     
     $(this.canvas_element).mousemove(function(event) {
         var msg = "M ";
-
+        
         msg += event.pageX + ", " + event.pageY;
         msg += " ox " + self.old_x + ", " + self.old_y;
         $("#mouse").html(msg);
@@ -36,7 +36,7 @@ MouseControl.prototype.init = function() {
                     self.longitude = -180;
                 }
             }
-            msg = "dx " + self.dx + " longitudeitude " + self.longitude;
+            msg = "dx " + self.dx + " longitude " + self.longitude;
 
             $("#slask").html(msg);
             self.old_x = event.pageX;
